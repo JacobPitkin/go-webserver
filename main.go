@@ -6,17 +6,19 @@ import (
 	"log"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	db, err := sql.Open("mysql", "root:root@(127.0.0.1:3306)/root?parseTime=true")
+	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	if err := db.Ping(); err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("opened db")
 
 	{
 		query := `
@@ -33,6 +35,8 @@ func main() {
 		}
 	}
 
+	fmt.Println("created db table")
+
 	{
 		username := "Jacob"
 		password := "secret"
@@ -46,6 +50,8 @@ func main() {
 		id, _ := result.LastInsertId()
 		fmt.Println(id)
 	}
+
+	fmt.Println("inserted user")
 
 	{
 		var (
@@ -62,6 +68,8 @@ func main() {
 
 		fmt.Println(id, username, password, createdAt)
 	}
+
+	fmt.Println("prepared statement")
 
 	{
 		type user struct {
@@ -94,10 +102,14 @@ func main() {
 		fmt.Printf("%#v", users)
 	}
 
+	fmt.Println("mass select")
+
 	{
 		_, err := db.Exec(`DELETE FROM users WHERE id = ?`, 1)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+
+	fmt.Println("deleted a user")
 }
