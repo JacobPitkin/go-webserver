@@ -4,13 +4,22 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "./test.db")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	dbLocation := os.Getenv("DB")
+
+	db, err := sql.Open("sqlite3", dbLocation)
 	if err != nil {
 		log.Fatal(err)
 	}
