@@ -11,6 +11,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const DEFAULT_LOCATION = "./default.db"
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -18,6 +20,10 @@ func main() {
 	}
 
 	dbLocation := os.Getenv("DB")
+
+	if dbLocation == "" {
+		dbLocation = DEFAULT_LOCATION
+	}
 
 	db, err := sql.Open("sqlite3", dbLocation)
 	if err != nil {
