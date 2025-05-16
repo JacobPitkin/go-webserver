@@ -36,11 +36,10 @@ func main() {
 func createDb(db *sql.DB) {
 	query := `
 	CREATE TABLE IF NOT EXISTS users (
-		id INT NOT NULL AUTO_INCREMENT,
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		username TEXT NOT NULL,
 		password TEXT NOT NULL,
-		created_at DATETIME,
-		PRIMARY KEY (id)
+		created_at DATETIME
 	);`
 
 	if _, err := db.Exec(query); err != nil {
